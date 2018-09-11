@@ -27,9 +27,10 @@ namespace CrossExchange.Controller
 
 
         [HttpGet("{portfolioid}")]
-        public async Task<IActionResult> GetAllTradings([FromRoute]int portFolioid)
+        public async Task<IActionResult> GetAllTradings([FromRoute]int portFolioId)
         {
-            var trade = _tradeRepository.Query().Where(x => x.PortfolioId.Equals(portFolioid));
+            //var trade = _tradeRepository.Query().Where(x => x.PortfolioId.Equals(portFolioid));
+            var trade = await _tradeRepository.GetAllTradings(portFolioId);
             return Ok(trade);
         }
 
@@ -59,7 +60,7 @@ namespace CrossExchange.Controller
                 return BadRequest(ModelState);
             }
 
-            Portfolio portfolio = await _portfolioRepository.GetAsync(model.PortfolioId.ToString());
+            Portfolio portfolio = await _portfolioRepository.GetAsync(model.PortfolioId);
 
             if (portfolio == null)
             {

@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Moq;
 using CrossExchange.Repository;
 using CrossExchange.Model;
+using System.Collections.Generic;
 
 namespace CrossExchange.Tests
 {
@@ -42,6 +43,30 @@ namespace CrossExchange.Tests
             Assert.NotNull(createdResult);
             Assert.AreEqual(201, createdResult.StatusCode);
         }
-        
+
+        [Test]
+        public async Task Get_ReturnsNotNull()
+        {
+            string symbol = "REL";
+
+            _shareRepositoryMock
+                .Setup(x => x.GetBySymbol(It.Is<string>(s => s == symbol)))
+                .Returns(Task.FromResult(new List<HourlyShareRate>(new[]
+                    {
+                        new HourlyShareRate() { Id = 1, Symbol = symbol, Rate = 100, TimeStamp = DateTime.Now }
+                    }))
+                );
+
+            var result = await _shareController.Get(symbol) as OkObjectResult;
+
+            Assert.NotNull(result);
+
+            var resultList = result.Value as List<HourlyShareRate>;
+
+            Assert.NotNull(resultList);
+
+            Assert.NotZero(resultList.Count);
+        }
+
     }
 }
