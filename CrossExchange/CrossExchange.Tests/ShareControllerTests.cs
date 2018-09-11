@@ -64,8 +64,6 @@ namespace CrossExchange.Tests
             var resultList = result.Value as List<HourlyShareRate>;
 
             Assert.NotNull(resultList);
-
-            Assert.NotZero(resultList.Count);
         }
 
     }

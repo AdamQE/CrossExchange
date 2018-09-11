@@ -11,16 +11,16 @@ namespace CrossExchange.Controller
     {
         private IPortfolioRepository _portfolioRepository { get; set; }
 
-        public PortfolioController(IShareRepository shareRepository, ITradeRepository tradeRepository, IPortfolioRepository portfolioRepository)
+        public PortfolioController(IPortfolioRepository portfolioRepository)
         {
             _portfolioRepository = portfolioRepository;
         }
 
         [HttpGet("{portFolioid}")]
-        public async Task<IActionResult> GetPortfolioInfo([FromRoute]int portFolioid)
+        public async Task<IActionResult> GetPortfolioInfo([FromRoute]int portFolioId)
         {
-            var portfolio = _portfolioRepository.GetAll().Where(x => x.Id.Equals(portFolioid));
-            
+            var portfolio = await _portfolioRepository.GetAsync(portFolioId);
+
             return Ok(portfolio);
         }
 
